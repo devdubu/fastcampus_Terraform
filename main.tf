@@ -15,7 +15,11 @@ provider "awscc" {
 }
 
 resource "aws_vpc" "foo" {
-    cidr_block = "10.1.0.0/16"
+    cidr_block = "10.123.0.0/16"
+
+    tags = {
+        "Name" = "This is test vpc"
+    }
 }
 
 resource "local_file" "foo" {
@@ -33,4 +37,11 @@ output "vpc_foo" {
 
 output "file_foo" {
   value = data.local_file.foo
+}
+
+data "aws_vpcs" "this"{ 
+}
+
+output "vpcs" {
+   value = data.aws_vpcs.this
 }
