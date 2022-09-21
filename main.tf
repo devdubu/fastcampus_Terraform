@@ -24,19 +24,26 @@ provider "aws" {
  * Groups
  */
 
-resource "aws_iam_group" "developer" {
-  name = "developer"
-}
+resource "aws_iam_group" "this"{
+	for_each = toset(["developer", "employee"])
 
-resource "aws_iam_group" "employee" {
-  name = "employee"
+	name = each.key
+
 }
+#resource "aws_iam_group" "developer" {
+#  name = "developer"
+#}
+#
+#resource "aws_iam_group" "employee" {
+#  name = "employee"
+#}
 
 output "groups" {
-  value = [
-    aws_iam_group.developer,
-    aws_iam_group.employee,
-  ]
+#  value = [
+#    aws_iam_group.developer,
+#    aws_iam_group.employee,
+#  ]
+	value = aws_iam_group.this
 }
 
 
@@ -69,7 +76,8 @@ resource "aws_iam_user_group_membership" "this" {
   }
 
   user   = each.key
-  groups = each.value.is_developer ? [aws_iam_group.developer.name, aws_iam_group.employee.name] : [aws_iam_group.employee.name]
+#  groups = each.value.is_developer ? [aws_iam_group.developer.name, aws_iam_group.employee.name] : [aws_iam_group.employee.name]
+	groups = each.value.is_developer ? [aws_iam_group.this["developer"].name, aws_iam_group.this["employee"].name] : [aws_iam_group.this["employee"].name]
 }
 
 locals {
