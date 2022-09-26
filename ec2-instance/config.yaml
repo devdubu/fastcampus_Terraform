@@ -1,0 +1,6 @@
+context: {}
+
+remote_states:
+  "network":
+    organization: "Test_Cloud_Devdubu"
+    workspace: "terraform-lab-network"
